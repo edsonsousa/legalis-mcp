@@ -1,0 +1,33 @@
+<svg width="1080" height="1080" viewBox="0 0 1080 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background gradient -->
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1080" y2="1080" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1a3a6b"/>
+      <stop offset="100%" stop-color="#2f5fad"/>
+    </linearGradient>
+  </defs>
+  <rect width="1080" height="1080" rx="80" fill="url(#bg)"/>
+
+  <!-- Icon centered, scaled up (original viewBox 0 0 32 36 → scale ~12x to ~384x432) -->
+  <!-- Centering: icon is 384 wide, 432 tall. cx = (1080-384)/2 = 348, cy = (1080-432)/2 - 80 = 244 (shifted up to leave room for text) -->
+  <g transform="translate(348, 200) scale(12)">
+    <!-- Document body -->
+    <rect x="12" y="10" width="8" height="16" rx="1" fill="white" opacity="0.95"/>
+    <!-- Top bar of document -->
+    <rect x="8" y="7" width="16" height="4" rx="2" fill="white" opacity="0.95"/>
+    <!-- Bottom bar of document -->
+    <rect x="7" y="26" width="18" height="4" rx="2" fill="white" opacity="0.95"/>
+    <!-- Gold coin/plus badge -->
+    <circle cx="25" cy="9" r="4" fill="#d4a843"/>
+    <!-- Plus vertical -->
+    <line x1="25" y1="6.5" x2="25" y2="11.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+    <!-- Plus horizontal -->
+    <line x1="22.5" y1="9" x2="27.5" y2="9" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+  </g>
+
+  <!-- "Legalis." text -->
+  <text x="540" y="740" font-family="Georgia, 'Times New Roman', serif" font-weight="700" font-size="140" fill="white" text-anchor="middle" letter-spacing="-2">Legalis.</text>
+
+  <!-- "IA Jurídica" tagline -->
+  <text x="540" y="840" font-family="Georgia, 'Times New Roman', serif" font-weight="400" font-size="56" fill="rgba(255,255,255,0.65)" text-anchor="middle" letter-spacing="4">IA JURÍDICA</text>
+</svg>
