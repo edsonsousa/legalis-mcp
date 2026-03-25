@@ -1,0 +1,70 @@
+# Smithery.ai registration for Legalis MCP Server
+# https://smithery.ai/docs/config
+
+name: legalis-mcp
+displayName: Legalis — Brazilian Legal AI
+description: >
+  Connect Claude to Legalis, the Brazilian legal document AI platform for attorneys.
+  Manage cases, generate peças processuais (petitions, defenses, appeals) with AI,
+  search LexML legislation, run guided case intake interviews, and track quota usage —
+  all via natural language in Portuguese.
+
+version: 0.1.0
+license: MIT
+homepage: https://hai-ten.vercel.app
+repository: https://github.com/hai-app/legalis-mcp
+
+categories:
+  - legal
+  - productivity
+  - brazil
+
+tags:
+  - direito
+  - jurídico
+  - peças-processuais
+  - advocacia
+  - lexml
+  - brazil
+  - portuguese
+
+# How to start the server
+startCommand:
+  type: stdio
+  command: legalis-mcp
+  args:
+    - serve
+
+# Installation instructions shown to users in Smithery UI
+installInstructions: |
+  1. Install:
+     ```bash
+     pip install legalis-mcp
+     ```
+     Or with uv:
+     ```bash
+     uv tool install legalis-mcp
+     ```
+
+  2. Authenticate (opens browser):
+     ```bash
+     legalis-mcp auth
+     ```
+
+  3. Add to your Claude config and start using!
+
+# Config shown in Smithery UI — no secrets needed
+config:
+  type: object
+  properties: {}
+  description: >
+    No configuration needed. Authentication is handled via
+    `legalis-mcp auth` (OAuth browser flow).
+
+examplePrompts:
+  - "Liste meus casos no Legalis"
+  - "Crie um caso de rescisão indireta para João Silva, trabalhista"
+  - "Gere a seção de fundamentos jurídicos da peça X do caso Y"
+  - "Pesquise legislação sobre justa causa na CLT"
+  - "Quantas gerações de peças ainda tenho disponíveis este mês?"
+  - "Qual o status do processo 0001234-56.2025.5.15.0001?"

@@ -1,0 +1,54 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "legalis-mcp"
+version = "0.1.0"
+description = "MCP server for Legalis — Brazilian legal document AI for attorneys"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+keywords = ["mcp", "legal", "brazil", "ai", "lawyers", "direito", "jurídico"]
+authors = [
+    { name = "Legalis", email = "contato@legalis.app" },
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Legal Industry",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Office/Business",
+    "Natural Language :: Portuguese",
+]
+dependencies = [
+    "mcp>=1.0.0",
+    "httpx>=0.27.0",
+    "python-dotenv>=1.0.0",
+    "click>=8.1.0",
+]
+
+[project.urls]
+Homepage = "https://hai-ten.vercel.app"
+Documentation = "https://github.com/hai-app/legalis-mcp#readme"
+Repository = "https://github.com/hai-app/legalis-mcp"
+"Bug Tracker" = "https://github.com/hai-app/legalis-mcp/issues"
+
+[project.scripts]
+legalis-mcp = "legalis_mcp.__main__:cli"
+
+[tool.hatch.build.targets.wheel]
+packages = ["legalis_mcp"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[project.optional-dependencies]
+test = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "respx>=0.21.0",
+]
