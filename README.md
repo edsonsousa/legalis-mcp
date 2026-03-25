@@ -1,4 +1,7 @@
 # Legalis MCP Server
+### Assistente jurídico com IA para advogados brasileiros
+
+> [Leia em Português](README.pt-BR.md)
 
 MCP (Model Context Protocol) server for [Legalis](https://hai-ten.vercel.app) — Brazilian legal document AI for attorneys.
 
