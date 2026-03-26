@@ -56,6 +56,7 @@ In Claude, try:
 
 ## Available tools
 
+### Cases
 | Tool | Description |
 |------|-------------|
 | `list_cases` | List cases (paginated, filterable by status) |
@@ -63,12 +64,41 @@ In Claude, try:
 | `create_case` | Create a new case |
 | `update_case` | Update case fields |
 | `search_cases` | Full-text search across cases |
+| `delete_case` | Delete a case permanently |
+
+### Legal documents
+| Tool | Description |
+|------|-------------|
 | `list_legal_documents` | List peças processuais for a case |
 | `get_legal_document` | Get a document with all sections |
 | `create_legal_document` | Create a new legal document |
 | `generate_section` | AI-generate a document section (fatos, fundamentos, pedidos…) |
+| `update_section_text` | Manually edit a document section |
 | `get_case_context` | Get case context (facts, parties, evidence) |
+| `update_case_context` | Update case context |
+| `delete_legal_document` | Delete a legal document |
+| `export_legal_document_docx` | Export a document as DOCX |
+
+### Events & Tasks
+| Tool | Description |
+|------|-------------|
+| `create_case_event` | Create an event on a case (internal or client-visible) |
+| `list_case_events` | List events for a case |
+| `delete_case_event` | Delete a case event |
+| `create_case_task` | Create a task with due date and priority |
+| `list_case_tasks` | List tasks for a case |
+| `update_case_task` | Update a task's fields |
+| `complete_case_task` | Mark a task as complete |
+| `delete_case_task` | Delete a task |
+| `list_upcoming_tasks` | List upcoming tasks across all cases |
+| `list_overdue_tasks` | List all overdue tasks |
+
+### Other
+| Tool | Description |
+|------|-------------|
 | `run_interview` | AI-guided case intake interview |
+| `list_templates` | List available document templates |
+| `get_template` | Get template details and sections |
 | `search_legislation` | Search Brazilian legislation (LexML) |
 | `get_my_usage` | Check AI quota and billing period usage |
 

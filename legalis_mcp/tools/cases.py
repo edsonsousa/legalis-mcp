@@ -146,3 +146,14 @@ async def search_cases(
     params: dict[str, Any] = {"q": q, "skip": skip, "limit": min(limit, 100)}
     client = get_client()
     return await client.get("/api/cases/search", params=params)
+
+
+async def delete_case(case_id: str) -> dict:
+    """
+    Delete a case permanently.
+
+    Args:
+        case_id: UUID of the case to delete.
+    """
+    client = get_client()
+    return await client.delete(f"/api/cases/{case_id}")

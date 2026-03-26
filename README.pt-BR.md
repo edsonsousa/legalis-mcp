@@ -54,6 +54,7 @@ No Claude, experimente:
 
 ## Ferramentas disponíveis
 
+### Casos
 | Ferramenta | Descrição |
 |------------|-----------|
 | `list_cases` | Lista casos (paginado, filtrável por status) |
@@ -61,12 +62,41 @@ No Claude, experimente:
 | `create_case` | Cria um novo caso |
 | `update_case` | Atualiza campos de um caso |
 | `search_cases` | Busca textual em todos os casos |
+| `delete_case` | Exclui um caso permanentemente |
+
+### Peças processuais
+| Ferramenta | Descrição |
+|------------|-----------|
 | `list_legal_documents` | Lista peças processuais de um caso |
 | `get_legal_document` | Obtém uma peça com todas as seções |
 | `create_legal_document` | Cria uma nova peça processual |
 | `generate_section` | Gera com IA uma seção da peça (fatos, fundamentos, pedidos…) |
+| `update_section_text` | Edita manualmente o texto de uma seção |
 | `get_case_context` | Obtém contexto do caso (fatos, partes, provas) |
+| `update_case_context` | Atualiza o contexto do caso |
+| `delete_legal_document` | Exclui uma peça processual |
+| `export_legal_document_docx` | Exporta uma peça no formato DOCX |
+
+### Eventos e Tarefas
+| Ferramenta | Descrição |
+|------------|-----------|
+| `create_case_event` | Cria um evento no caso (interno ou visível ao cliente) |
+| `list_case_events` | Lista eventos de um caso |
+| `delete_case_event` | Exclui um evento do caso |
+| `create_case_task` | Cria uma tarefa com prazo e prioridade |
+| `list_case_tasks` | Lista tarefas de um caso |
+| `update_case_task` | Atualiza campos de uma tarefa |
+| `complete_case_task` | Marca uma tarefa como concluída |
+| `delete_case_task` | Exclui uma tarefa |
+| `list_upcoming_tasks` | Lista tarefas próximas em todos os casos |
+| `list_overdue_tasks` | Lista todas as tarefas em atraso |
+
+### Outros
+| Ferramenta | Descrição |
+|------------|-----------|
 | `run_interview` | Entrevista guiada por IA para captação do caso |
+| `list_templates` | Lista modelos de peças disponíveis |
+| `get_template` | Obtém detalhes e seções de um modelo |
 | `search_legislation` | Pesquisa legislação brasileira (LexML) |
 | `get_my_usage` | Consulta cota de IA e uso no período de cobrança |
 
