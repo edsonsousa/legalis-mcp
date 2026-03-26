@@ -144,3 +144,33 @@ async def test_update_case_sends_only_provided_fields():
     await update_case("c1", status="arquivado")
     payload = json.loads(route.calls[0].request.read())
     assert payload == {"status": "arquivado"}
+
+
+# ---------------------------------------------------------------------------
+# delete_case
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.asyncio
+@respx.mock
+async def test_delete_case_calls_delete():
+    route = respx.delete(f"{BASE}/api/cases/c1").mock(
+        return_value=httpx.Response(204)
+    )
+    from legalis_mcp.tools.cases import delete_case
+
+    result = await delete_case("c1")
+    assert result is None
+    assert route.called
+
+
+@pytest.mark.asyncio
+@respx.mock
+async def test_delete_case_api_error():
+    respx.delete(f"{BASE}/api/cases/c1").mock(
+        return_value=httpx.Response(404, json={"detail": "Not found"})
+    )
+    from legalis_mcp.tools.cases import delete_case
+
+    with pytest.raises(RuntimeError, match="404"):
+        await delete_case("c1")

@@ -314,3 +314,163 @@ async def test_list_upcoming_tasks_api_error():
 
     with pytest.raises(RuntimeError, match="500"):
         await list_upcoming_tasks()
+
+
+# ---------------------------------------------------------------------------
+# list_overdue_tasks
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.asyncio
+@respx.mock
+async def test_list_overdue_tasks_returns_items():
+    respx.get(f"{BASE}/api/tasks/overdue").mock(
+        return_value=httpx.Response(
+            200,
+            json={
+                "items": [{"id": "t1", "title": "Prazo vencido", "case_id": CASE_ID}],
+                "total": 1,
+            },
+        )
+    )
+    from legalis_mcp.tools.events_tasks import list_overdue_tasks
+
+    result = await list_overdue_tasks()
+    assert result["total"] == 1
+    assert result["items"][0]["id"] == "t1"
+
+
+# ---------------------------------------------------------------------------
+# list_case_tasks
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.asyncio
+@respx.mock
+async def test_list_case_tasks_returns_items():
+    respx.get(f"{BASE}/api/cases/{CASE_ID}/tasks").mock(
+        return_value=httpx.Response(
+            200,
+            json={
+                "items": [{"id": "t1", "title": "Protocolar"}],
+                "total": 1,
+            },
+        )
+    )
+    from legalis_mcp.tools.events_tasks import list_case_tasks
+
+    result = await list_case_tasks(CASE_ID)
+    assert result["total"] == 1
+
+
+# ---------------------------------------------------------------------------
+# update_case_task
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.asyncio
+@respx.mock
+async def test_update_case_task_sends_only_provided_fields():
+    route = respx.put(f"{BASE}/api/cases/{CASE_ID}/tasks/task-1").mock(
+        return_value=httpx.Response(200, json={"id": "task-1"})
+    )
+    from legalis_mcp.tools.events_tasks import update_case_task
+
+    await update_case_task(CASE_ID, "task-1", priority="urgent")
+    payload = json.loads(route.calls[0].request.read())
+    assert payload == {"priority": "urgent"}
+
+
+@pytest.mark.asyncio
+@respx.mock
+async def test_update_case_task_multiple_fields():
+    route = respx.put(f"{BASE}/api/cases/{CASE_ID}/tasks/task-1").mock(
+        return_value=httpx.Response(200, json={"id": "task-1"})
+    )
+    from legalis_mcp.tools.events_tasks import update_case_task
+
+    await update_case_task(
+        CASE_ID, "task-1", title="Novo título", due_date="2026-05-01T09:00:00"
+    )
+    payload = json.loads(route.calls[0].request.read())
+    assert payload["title"] == "Novo título"
+    assert payload["due_date"] == "2026-05-01T09:00:00"
+    assert "priority" not in payload
+
+
+# ---------------------------------------------------------------------------
+# complete_case_task
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.asyncio
+@respx.mock
+async def test_complete_case_task_calls_endpoint():
+    route = respx.post(f"{BASE}/api/cases/{CASE_ID}/tasks/task-1/complete").mock(
+        return_value=httpx.Response(200, json={"id": "task-1", "completed": True})
+    )
+    from legalis_mcp.tools.events_tasks import complete_case_task
+
+    result = await complete_case_task(CASE_ID, "task-1")
+    assert result["completed"] is True
+    assert route.called
+
+
+# ---------------------------------------------------------------------------
+# delete_case_task
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.asyncio
+@respx.mock
+async def test_delete_case_task_calls_delete():
+    route = respx.delete(f"{BASE}/api/cases/{CASE_ID}/tasks/task-1").mock(
+        return_value=httpx.Response(204)
+    )
+    from legalis_mcp.tools.events_tasks import delete_case_task
+
+    result = await delete_case_task(CASE_ID, "task-1")
+    assert result is None
+    assert route.called
+
+
+@pytest.mark.asyncio
+@respx.mock
+async def test_delete_case_task_api_error():
+    respx.delete(f"{BASE}/api/cases/{CASE_ID}/tasks/task-1").mock(
+        return_value=httpx.Response(404, json={"detail": "Not found"})
+    )
+    from legalis_mcp.tools.events_tasks import delete_case_task
+
+    with pytest.raises(RuntimeError, match="404"):
+        await delete_case_task(CASE_ID, "task-1")
+
+
+# ---------------------------------------------------------------------------
+# delete_case_event
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.asyncio
+@respx.mock
+async def test_delete_case_event_calls_delete():
+    route = respx.delete(f"{BASE}/api/cases/{CASE_ID}/events/evt-1").mock(
+        return_value=httpx.Response(204)
+    )
+    from legalis_mcp.tools.events_tasks import delete_case_event
+
+    result = await delete_case_event(CASE_ID, "evt-1")
+    assert result is None
+    assert route.called
+
+
+@pytest.mark.asyncio
+@respx.mock
+async def test_delete_case_event_api_error():
+    respx.delete(f"{BASE}/api/cases/{CASE_ID}/events/evt-1").mock(
+        return_value=httpx.Response(404, json={"detail": "Not found"})
+    )
+    from legalis_mcp.tools.events_tasks import delete_case_event
+
+    with pytest.raises(RuntimeError, match="404"):
+        await delete_case_event(CASE_ID, "evt-1")
