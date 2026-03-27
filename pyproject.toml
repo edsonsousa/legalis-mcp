@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "legalis-mcp"
-version = "0.4.0"
+version = "0.5.0"
 description = "MCP server for Legalis — Brazilian legal document AI for attorneys"
 readme = "README.md"
 requires-python = ">=3.11"
