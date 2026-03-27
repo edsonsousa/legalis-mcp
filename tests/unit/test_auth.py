@@ -13,6 +13,8 @@ from legalis_mcp.auth import (
     CLIENT_ID,
     FRONTEND_URL,
     Credentials,
+    _html_error,
+    _html_success,
     load_credentials,
     save_credentials,
 )
@@ -158,3 +160,42 @@ def test_load_credentials_env_takes_precedence_over_file(tmp_path, monkeypatch):
 
     creds = load_credentials()
     assert creds.access_token == "env-access"
+
+
+# ---------------------------------------------------------------------------
+# HTML pages — _html_success / _html_error
+# ---------------------------------------------------------------------------
+
+
+def test_html_success_contains_primary_color():
+    assert "#1a3a6b" in _html_success()
+
+
+def test_html_success_contains_accent_color():
+    assert "#d4a843" in _html_success()
+
+
+def test_html_success_contains_message():
+    html = _html_success()
+    assert "Autenticação concluída" in html
+    assert "fechar" in html
+
+
+def test_html_success_is_valid_html():
+    html = _html_success()
+    assert "<!DOCTYPE html>" in html
+    assert "<head>" in html
+    assert "<body>" in html
+
+
+def test_html_error_contains_message():
+    html = _html_error("Autorização negada.")
+    assert "Autorização negada." in html
+
+
+def test_html_error_contains_primary_color():
+    assert "#1a3a6b" in _html_error("qualquer erro")
+
+
+def test_html_error_differs_from_success():
+    assert _html_error("x") != _html_success()

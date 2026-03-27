@@ -3,20 +3,117 @@ Entry point for the Legalis MCP server.
 
 Usage:
     legalis-mcp auth        # Authenticate via browser (OAuth flow)
+    legalis-mcp configure   # Configure Legalis MCP in detected MCP clients
     legalis-mcp serve       # Start MCP server (stdio transport, for Claude config)
     legalis-mcp logout      # Remove stored credentials
     legalis-mcp status      # Check authentication status
 """
 
+import json
+import shutil
 import sys
+from pathlib import Path
+from typing import Optional
 
 import click
+
+_MCP_CLIENTS: dict[str, dict[str, str]] = {
+    "Claude Desktop": {
+        "linux": "~/.config/claude/claude_desktop_config.json",
+        "darwin": "~/Library/Application Support/Claude/claude_desktop_config.json",
+        "win32": "~/AppData/Roaming/Claude/claude_desktop_config.json",
+    },
+    "Cursor": {
+        "linux": "~/.cursor/mcp.json",
+        "darwin": "~/.cursor/mcp.json",
+        "win32": "~/AppData/Roaming/Cursor/mcp.json",
+    },
+    "Windsurf": {
+        "linux": "~/.codeium/windsurf/mcp_config.json",
+        "darwin": "~/.codeium/windsurf/mcp_config.json",
+        "win32": "~/.codeium/windsurf/mcp_config.json",
+    },
+    "Claude Code": {
+        "linux": "~/.claude/claude_code_config.json",
+        "darwin": "~/.claude/claude_code_config.json",
+        "win32": "~/.claude/claude_code_config.json",
+    },
+}
+
+
+def _find_executable() -> str:
+    found = shutil.which("legalis-mcp")
+    if found:
+        return found
+    return f"{sys.executable} -m legalis_mcp"
+
+
+def _get_client_config_path(paths_by_platform: dict[str, str]) -> Optional[Path]:
+    platform = sys.platform
+    raw = paths_by_platform.get(platform) or paths_by_platform.get("linux")
+    if not raw:
+        return None
+    path = Path(raw).expanduser()
+    if path.parent.exists():
+        return path
+    return None
+
+
+def _merge_mcp_config(config_path: Path, executable: str) -> None:
+    existing: dict = {}
+    if config_path.exists():
+        try:
+            existing = json.loads(config_path.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            existing = {}
+    existing.setdefault("mcpServers", {})["legalis"] = {
+        "command": executable,
+        "args": ["serve"],
+    }
+    config_path.write_text(json.dumps(existing, indent=2, ensure_ascii=False), encoding="utf-8")
 
 
 @click.group()
 def cli():
     """Legalis MCP — AI assistant for Brazilian legal practitioners."""
     pass
+
+
+@cli.command()
+def configure():
+    """Configure Legalis MCP in detected MCP clients automatically."""
+    executable = _find_executable()
+    configured = []
+    not_found = []
+
+    for client_name, paths_by_platform in _MCP_CLIENTS.items():
+        config_path = _get_client_config_path(paths_by_platform)
+        if config_path is None:
+            not_found.append(client_name)
+            continue
+        _merge_mcp_config(config_path, executable)
+        configured.append((client_name, config_path))
+
+    if configured:
+        click.echo("\nClientes configurados:")
+        for name, path in configured:
+            click.echo(f"  \u2713 {name}  \u2192  {path}")
+        click.echo("\nReinicie o cliente para ativar o Legalis.")
+
+    if not_found:
+        click.echo("\nClientes nao encontrados:")
+        for name in not_found:
+            click.echo(f"  - {name}")
+
+    if not configured:
+        click.echo("\nNenhum cliente MCP detectado.")
+        click.echo("Adicione manualmente ao arquivo de configuracao do seu cliente:\n")
+        fallback = {
+            "mcpServers": {
+                "legalis": {"command": executable, "args": ["serve"]}
+            }
+        }
+        click.echo(json.dumps(fallback, indent=2))
 
 
 @cli.command()

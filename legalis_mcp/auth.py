@@ -40,6 +40,101 @@ FRONTEND_URL = os.environ.get("LEGALIS_FRONTEND_URL", "https://legalis-ia.com")
 CLIENT_ID = "local-mcp"
 
 
+_LOGO_SVG = """<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 32 32">
+  <rect width="32" height="32" rx="6" fill="#1a3a6b"/>
+  <rect x="12" y="8" width="6" height="14" rx="1" fill="white"/>
+  <rect x="8" y="6" width="14" height="3.5" rx="1.5" fill="white"/>
+  <rect x="7" y="22" width="16" height="3.5" rx="1.5" fill="white"/>
+  <circle cx="23" cy="7.5" r="3.5" fill="#d4a843"/>
+  <line x1="23" y1="5.5" x2="23" y2="9.5" stroke="white" stroke-width="1.2" stroke-linecap="round"/>
+  <line x1="21" y1="7.5" x2="25" y2="7.5" stroke="white" stroke-width="1.2" stroke-linecap="round"/>
+</svg>"""
+
+_HTML_BASE = """<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Legalis — {title}</title>
+  <style>
+    *, *::before, *::after {{ box-sizing: border-box; margin: 0; padding: 0; }}
+    body {{
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f8fafc;
+      color: #0f172a;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }}
+    .card {{
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.06);
+      padding: 40px 48px;
+      max-width: 440px;
+      width: 100%;
+      text-align: center;
+      border-top: 4px solid {accent};
+    }}
+    .logo {{ margin-bottom: 24px; }}
+    .icon {{
+      width: 52px; height: 52px; border-radius: 50%;
+      background: {icon_bg};
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 24px;
+    }}
+    h1 {{ font-size: 1.25rem; font-weight: 600; color: #0f172a; margin-bottom: 8px; }}
+    p {{ font-size: 0.9rem; color: #64748b; line-height: 1.5; }}
+    .detail {{
+      margin-top: 12px;
+      font-size: 0.8rem;
+      color: #94a3b8;
+      font-family: monospace;
+    }}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">{logo}</div>
+    <div class="icon">{icon}</div>
+    <h1>{heading}</h1>
+    <p>{body}</p>
+    {detail_block}
+  </div>
+</body>
+</html>"""
+
+
+def _html_success() -> str:
+    """Return styled HTML for the OAuth success page."""
+    return _HTML_BASE.format(
+        title="Autenticação concluída",
+        accent="#1a3a6b",
+        icon_bg="#dcfce7",
+        logo=_LOGO_SVG,
+        icon="✓",
+        heading="Autenticação concluída",
+        body="Pode fechar esta aba e voltar ao Claude.",
+        detail_block="",
+    )
+
+
+def _html_error(message: str) -> str:
+    """Return styled HTML for OAuth error pages."""
+    return _HTML_BASE.format(
+        title="Erro de autenticação",
+        accent="#dc2626",
+        icon_bg="#fee2e2",
+        logo=_LOGO_SVG,
+        icon="✕",
+        heading="Erro de autenticação",
+        body="Pode fechar esta aba e tentar novamente.",
+        detail_block=f'<p class="detail">{message}</p>',
+    )
+
+
 class Credentials:
     def __init__(self, access_token: str, refresh_token: str):
         self.access_token = access_token
@@ -142,32 +237,22 @@ def run_auth_flow(port: int = DEFAULT_OAUTH_PORT) -> Credentials:
 
             if error:
                 result["error"] = error
-                self._respond(
-                    400,
-                    "<html><body><h2>Autorização negada.</h2>"
-                    "<p>Pode fechar esta aba.</p></body></html>",
-                    content_type="text/html",
-                )
+                self._respond(400, _html_error("Autorização negada."), content_type="text/html")
                 auth_done.set()
                 return
 
             if returned_state != state:
                 result["error"] = "state_mismatch"
-                self._respond(400, "State mismatch — possível ataque CSRF.")
+                self._respond(400, _html_error("Erro de segurança: state mismatch."), content_type="text/html")
                 auth_done.set()
                 return
 
             if code:
                 result["code"] = code
-                self._respond(
-                    200,
-                    "<html><body><h2>Autenticação concluída ✓</h2>"
-                    "<p>Pode fechar esta aba e voltar ao Claude.</p></body></html>",
-                    content_type="text/html",
-                )
+                self._respond(200, _html_success(), content_type="text/html")
                 auth_done.set()
             else:
-                self._respond(400, "Código ausente. Tente novamente.")
+                self._respond(400, _html_error("Código ausente. Tente novamente."), content_type="text/html")
 
         def _respond(self, code: int, body: str, content_type: str = "text/plain"):
             encoded = body.encode()
