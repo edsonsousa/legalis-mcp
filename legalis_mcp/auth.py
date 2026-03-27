@@ -36,7 +36,7 @@ DEFAULT_OAUTH_PORT = int(os.environ.get("LEGALIS_OAUTH_PORT", "3742"))
 API_BASE_URL = os.environ.get(
     "LEGALIS_API_URL", "https://hai-production-612f.up.railway.app"
 )
-FRONTEND_URL = os.environ.get("LEGALIS_FRONTEND_URL", "https://hai-ten.vercel.app")
+FRONTEND_URL = os.environ.get("LEGALIS_FRONTEND_URL", "https://legalis-ia.com")
 CLIENT_ID = "local-mcp"
 
 
@@ -122,7 +122,7 @@ def run_auth_flow(port: int = DEFAULT_OAUTH_PORT) -> Credentials:
         "code_challenge": code_challenge,
         "code_challenge_method": "S256",
     }
-    auth_url = f"{FRONTEND_URL}/auth/authorize?{urlencode(params)}"
+    auth_url = f"{API_BASE_URL}/api/auth/authorize?{urlencode(params)}"
 
     result: dict = {}
     server_ready = threading.Event()
