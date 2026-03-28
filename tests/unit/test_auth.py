@@ -87,7 +87,7 @@ def test_auth_url_not_direct_frontend():
     """auth_url não deve apontar diretamente para o frontend."""
     url = _capture_auth_url()
     assert "legalis-ia.com" not in url
-    assert "hai-ten.vercel.app" not in url
+    assert "legalis-ia.com" not in url
 
 
 def test_auth_url_contains_client_id():

@@ -3,7 +3,7 @@
 
 > [Leia em Português](README.pt-BR.md)
 
-MCP (Model Context Protocol) server for [Legalis](https://hai-ten.vercel.app) — Brazilian legal document AI for attorneys.
+MCP (Model Context Protocol) server for [Legalis](https://legalis-ia.com) — Brazilian legal document AI for attorneys.
 
 Connect Claude (or any MCP-compatible client) to your Legalis account and interact with cases, generate legal documents, search legislation, and more using natural language.
 

@@ -1,7 +1,7 @@
 # Legalis MCP Server
 ### Assistente jurídico com IA para advogados brasileiros
 
-Servidor MCP (Model Context Protocol) para o [Legalis](https://hai-ten.vercel.app) — IA para documentos jurídicos voltada a advogados brasileiros.
+Servidor MCP (Model Context Protocol) para o [Legalis](https://legalis-ia.com) — IA para documentos jurídicos voltada a advogados brasileiros.
 
 Conecte o Claude (ou qualquer cliente compatível com MCP) à sua conta Legalis e interaja com casos, gere peças processuais, pesquise legislação e muito mais usando linguagem natural.
 

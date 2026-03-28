@@ -31,7 +31,7 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://hai-ten.vercel.app"
+Homepage = "https://legalis-ia.com"
 Documentation = "https://github.com/hai-app/legalis-mcp#readme"
 Repository = "https://github.com/hai-app/legalis-mcp"
 "Bug Tracker" = "https://github.com/hai-app/legalis-mcp/issues"
