@@ -102,6 +102,85 @@ No Claude, experimente:
 
 ---
 
+## Cobertura da API
+
+A tabela abaixo mapeia todos os endpoints do backend Legalis para a ferramenta MCP correspondente (quando disponível).
+
+### Casos
+| Endpoint | Método | Ferramenta MCP |
+|----------|--------|----------------|
+| `/api/cases` | GET | `list_cases` ✅ |
+| `/api/cases` | POST | `create_case` ✅ |
+| `/api/cases/{id}` | GET | `get_case` ✅ |
+| `/api/cases/{id}` | PUT | `update_case` ✅ |
+| `/api/cases/{id}` | DELETE | `delete_case` ✅ |
+| `/api/cases/search` | GET | `search_cases` ✅ |
+| `/api/cases/{id}/overview` | GET | — |
+| `/api/cases/{id}/portal-token` | POST / DELETE | — |
+
+### Peças processuais
+| Endpoint | Método | Ferramenta MCP |
+|----------|--------|----------------|
+| `/api/cases/{id}/legal-documents` | GET | `list_legal_documents` ✅ |
+| `/api/cases/{id}/legal-documents` | POST | `create_legal_document` ✅ |
+| `/api/cases/{id}/legal-documents/{doc}` | GET | `get_legal_document` ✅ |
+| `/api/cases/{id}/legal-documents/{doc}` | DELETE | `delete_legal_document` ✅ |
+| `/api/cases/{id}/legal-documents/{doc}/sections/{key}/generate` | POST | `generate_section` ✅ |
+| `/api/cases/{id}/legal-documents/{doc}/sections/{key}/text` | PUT | `update_section_text` ✅ |
+| `/api/cases/{id}/legal-documents/{doc}/export/docx` | GET | `export_legal_document_docx` ✅ |
+
+### Contexto do caso
+| Endpoint | Método | Ferramenta MCP |
+|----------|--------|----------------|
+| `/api/cases/{id}/context` | GET | `get_case_context` ✅ |
+| `/api/cases/{id}/context` | PUT | `update_case_context` ✅ |
+| `/api/cases/{id}/context/history` | GET | — |
+
+### Tarefas
+| Endpoint | Método | Ferramenta MCP |
+|----------|--------|----------------|
+| `/api/cases/{id}/tasks` | GET | `list_case_tasks` ✅ |
+| `/api/cases/{id}/tasks` | POST | `create_case_task` ✅ |
+| `/api/cases/{id}/tasks/{task}` | PUT | `update_case_task` ✅ |
+| `/api/cases/{id}/tasks/{task}` | DELETE | `delete_case_task` ✅ |
+| `/api/cases/{id}/tasks/{task}/complete` | POST | `complete_case_task` ✅ |
+| `/api/tasks/upcoming` | GET | `list_upcoming_tasks` ✅ |
+| `/api/tasks/overdue` | GET | `list_overdue_tasks` ✅ |
+
+### Eventos
+| Endpoint | Método | Ferramenta MCP |
+|----------|--------|----------------|
+| `/api/cases/{id}/events` | GET | `list_case_events` ✅ |
+| `/api/cases/{id}/events` | POST | `create_case_event` ✅ |
+| `/api/cases/{id}/events/{event}` | DELETE | `delete_case_event` ✅ |
+
+### Modelos e Legislação
+| Endpoint | Método | Ferramenta MCP |
+|----------|--------|----------------|
+| `/api/templates` | GET | `list_templates` ✅ |
+| `/api/templates/{id}` | GET | `get_template` ✅ |
+| `/api/legislacao` | GET | `search_legislation` ✅ |
+
+### Uso
+| Endpoint | Método | Ferramenta MCP |
+|----------|--------|----------------|
+| `/api/plans/my-usage` | GET | `get_my_usage` ✅ |
+
+### Ainda não cobertos
+| Endpoint | Observação |
+|----------|------------|
+| `/api/cases/{id}/overview` | Endpoint BFF — caso + tarefas + eventos em uma chamada |
+| `/api/cases/{id}/portal-token` | Compartilhar o caso com clientes via link público |
+| `/api/cases/{id}/context/history` | Histórico de versões do contexto |
+| `/api/users/me` | Leitura e atualização do perfil do usuário |
+| `/api/users/settings` | Preferências de notificação e interface |
+| `/api/users/documents` | Documentos enviados (não gerados por IA) |
+| `/api/voice-agent/*` | Assistente de voz (feature limitada por plano) |
+| `/api/corporates/{id}/users` | Gerenciamento de membros da equipe |
+| `/api/subordinates/invite` | Convidar membros para a equipe |
+
+---
+
 ## Comandos CLI
 
 ```bash

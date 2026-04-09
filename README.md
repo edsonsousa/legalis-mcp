@@ -104,6 +104,85 @@ In Claude, try:
 
 ---
 
+## API coverage
+
+The table below maps every Legalis backend endpoint to its MCP tool (when available).
+
+### Cases
+| Endpoint | Method | MCP Tool |
+|----------|--------|----------|
+| `/api/cases` | GET | `list_cases` ✅ |
+| `/api/cases` | POST | `create_case` ✅ |
+| `/api/cases/{id}` | GET | `get_case` ✅ |
+| `/api/cases/{id}` | PUT | `update_case` ✅ |
+| `/api/cases/{id}` | DELETE | `delete_case` ✅ |
+| `/api/cases/search` | GET | `search_cases` ✅ |
+| `/api/cases/{id}/overview` | GET | — |
+| `/api/cases/{id}/portal-token` | POST / DELETE | — |
+
+### Legal documents
+| Endpoint | Method | MCP Tool |
+|----------|--------|----------|
+| `/api/cases/{id}/legal-documents` | GET | `list_legal_documents` ✅ |
+| `/api/cases/{id}/legal-documents` | POST | `create_legal_document` ✅ |
+| `/api/cases/{id}/legal-documents/{doc}` | GET | `get_legal_document` ✅ |
+| `/api/cases/{id}/legal-documents/{doc}` | DELETE | `delete_legal_document` ✅ |
+| `/api/cases/{id}/legal-documents/{doc}/sections/{key}/generate` | POST | `generate_section` ✅ |
+| `/api/cases/{id}/legal-documents/{doc}/sections/{key}/text` | PUT | `update_section_text` ✅ |
+| `/api/cases/{id}/legal-documents/{doc}/export/docx` | GET | `export_legal_document_docx` ✅ |
+
+### Case context
+| Endpoint | Method | MCP Tool |
+|----------|--------|----------|
+| `/api/cases/{id}/context` | GET | `get_case_context` ✅ |
+| `/api/cases/{id}/context` | PUT | `update_case_context` ✅ |
+| `/api/cases/{id}/context/history` | GET | — |
+
+### Tasks
+| Endpoint | Method | MCP Tool |
+|----------|--------|----------|
+| `/api/cases/{id}/tasks` | GET | `list_case_tasks` ✅ |
+| `/api/cases/{id}/tasks` | POST | `create_case_task` ✅ |
+| `/api/cases/{id}/tasks/{task}` | PUT | `update_case_task` ✅ |
+| `/api/cases/{id}/tasks/{task}` | DELETE | `delete_case_task` ✅ |
+| `/api/cases/{id}/tasks/{task}/complete` | POST | `complete_case_task` ✅ |
+| `/api/tasks/upcoming` | GET | `list_upcoming_tasks` ✅ |
+| `/api/tasks/overdue` | GET | `list_overdue_tasks` ✅ |
+
+### Events
+| Endpoint | Method | MCP Tool |
+|----------|--------|----------|
+| `/api/cases/{id}/events` | GET | `list_case_events` ✅ |
+| `/api/cases/{id}/events` | POST | `create_case_event` ✅ |
+| `/api/cases/{id}/events/{event}` | DELETE | `delete_case_event` ✅ |
+
+### Templates & Legislation
+| Endpoint | Method | MCP Tool |
+|----------|--------|----------|
+| `/api/templates` | GET | `list_templates` ✅ |
+| `/api/templates/{id}` | GET | `get_template` ✅ |
+| `/api/legislacao` | GET | `search_legislation` ✅ |
+
+### Usage
+| Endpoint | Method | MCP Tool |
+|----------|--------|----------|
+| `/api/plans/my-usage` | GET | `get_my_usage` ✅ |
+
+### Not yet covered
+| Endpoint | Notes |
+|----------|-------|
+| `/api/cases/{id}/overview` | BFF endpoint — case + tasks + events in one call |
+| `/api/cases/{id}/portal-token` | Share case status with clients via public link |
+| `/api/cases/{id}/context/history` | Context version history |
+| `/api/users/me` | User profile read/update |
+| `/api/users/settings` | Notification and UI preferences |
+| `/api/users/documents` | Uploaded documents (non-generated) |
+| `/api/voice-agent/*` | Voice assistant (plan-gated feature) |
+| `/api/corporates/{id}/users` | Team member management |
+| `/api/subordinates/invite` | Invite team members |
+
+---
+
 ## CLI commands
 
 ```bash
